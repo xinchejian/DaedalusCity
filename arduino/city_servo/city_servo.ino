@@ -33,6 +33,7 @@
    r      report range.
    s      stop at current position
    g      let go, release motor
+   f##    go to percentage position
  */
 
 #include <Stepper.h>
@@ -122,6 +123,10 @@ void loop() {
         tmp = Serial.parseInt();
         target = tmp;
         break;
+      case 'f':
+        tmp = Serial.parseInt();
+        target = max * tmp / 100;
+        break;
       case 'c':
         calibrate();
         break;
@@ -141,7 +146,7 @@ void loop() {
   }
   
   // If it is in let go status, do not do anything
-  if(letGo) continue;
+  if(letGo) return;
   
   // Move the motor towards the target pos by 1 step.
   if(target > pos){
