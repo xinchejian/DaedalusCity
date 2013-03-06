@@ -37,6 +37,7 @@ long max = 0;
 void setup() {
   Serial.begin(115200);
   
+  // Start up blink
   pinMode(LED, OUTPUT);
   digitalWrite(LED, HIGH);
   delay(100);
