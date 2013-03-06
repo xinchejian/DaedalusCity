@@ -31,6 +31,8 @@
    p##    go to position ##, where ## is an integer number, e.g. p100
    c      do calibration, go home, then top then home.
    r      report range.
+   s      stop at current position
+   g      let go, release motor
  */
 
 #include <Stepper.h>
@@ -50,6 +52,9 @@ long pos = 0;
 long max = 0;
 long target = 0;
 long reportTime = 0;
+
+int letGo = false;
+
 void setup() {
   Serial.begin(115200);
   
@@ -123,8 +128,20 @@ void loop() {
       case 'r':
         reportRange();
         break;
+      case 's':
+        target = pos;
+        break;
+    }
+    if(cmd == 'g'){
+      stop();
+      letGo = true;
+    }else {
+      letGo = false;
     }
   }
+  
+  // If it is in let go status, do not do anything
+  if(letGo) continue;
   
   // Move the motor towards the target pos by 1 step.
   if(target > pos){
